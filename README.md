@@ -7,16 +7,24 @@ You may place multiple URLs in a comma separated string in the URL input, this a
 You may also Specify a number of retries, so that if a given call fails when first called the task will attempt to retry the call.  This allows for applications where the first call may time out or otherwise fail due to any sort of server "spin up" or other issues, but you don't want to fail the release for those situations.
 
 ## Input Value usage
-Url(s)
-    -- the url or list of URLs to call. The address information should include the protocol desired (http:// or https://).  This may be a list of addresses that are comma separated. 
+**Url(s)**
+ the url or list of URLs to call. The address information should include the protocol desired (http:// or https://).  This may be a list of addresses that are comma separated.
+    
     Ex. "http://www.oneluckidev.com"
+    
     Ex2. "http://server1/api/healthcheck, http://server2/api/healthcheck, http://server3/api/healthcheck"
-Expected Return Code
+
+
+**Expected Return Code**
       -- the response code returned by the server that you are expecting. 
     Ex. 200
-Number of Retry Attempts
+
+
+**Number of Retry Attempts**
      -- the number of attempted retries that the task should go through before failing the task.  
+    
     Ex. 3  --- three retries will give a total of four calls the first call, and then three retry attempts
+    
     Ex2. 0  --- Zero retries to fail after the first call
 
 ## Smoke Test task goals
