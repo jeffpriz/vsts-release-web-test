@@ -35,8 +35,8 @@ Simple task to test the availability of a web applicaiton or api after a deploym
 ## Requirements
 Since the task is executed by the build agent, your build machines has to have access to the website you are trying to call.
 ## Images
-![Smoke web test task preview](images/task.jpg)
-![Smoke web test task preview detail](images/input.jpg)
+![Smoke web test task preview](images/task.png)
+![Smoke web test task preview detail](images/input.png)
 
 ## Source
 [GitHub](https://github.com/jeffpriz/vsts-release-web-test)
