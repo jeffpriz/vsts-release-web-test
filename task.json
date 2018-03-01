@@ -1,8 +1,8 @@
 {
     "id": "eea06bb8-4912-47d5-b3bf-2b742388daf3",
-    "name": "vsts-release-web-test",
+    "name": "oneluckidevWebSmokeTest",
     "friendlyName": "Release Web Test",
-    "description": "Release Task that will test the availability of a web application after the deployment step so you can determin if the release was successful or not",
+    "description": "Release Task to test the availability of a web application after the deployment step so you can determine if the release was successful or not",
     "author": "Jeff Przylucki",  
     "category": "Utility",
     "visibility": [
@@ -12,10 +12,17 @@
     "version": {
       "Major": "1",
       "Minor": "0", 
-      "Patch": "0"
+      "Patch": "22"
     },
     "minimumAgentVersion": "1.95.0",
-    "instanceNameFormat": "Web Test $(message)",
+    "instanceNameFormat": "Smoke Web Test $(message)",
+    "groups": [
+        {
+            "name": "advanced",
+            "displayName": "Advanced",
+            "isExpanded": false
+        }
+    ],
     "inputs": [
         {
             "name": "url",

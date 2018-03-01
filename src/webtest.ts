@@ -1,4 +1,5 @@
 import * as tl from 'vsts-task-lib';
+import fetch from 'node-fetch';
 
 
 let input_url:string = '';
@@ -23,7 +24,7 @@ function validateInputs()
     }
     catch(ex)
     {
-        console.error("a URL is a required input to this task, but was not supplied");
+        tl.error("a URL is a required input to this task, but was not supplied");
         validInputs = false;
     }
 
@@ -35,7 +36,7 @@ function validateInputs()
     }
     catch(ex)
     {
-        console.error("An expected return code is a required input to this task, but was not supplied");
+        tl.error("An expected return code is a required input to this task, but was not supplied");
         validInputs = false;
     }
 
@@ -48,7 +49,7 @@ function validateInputs()
     }
     catch(ex)
     {
-        console.error("A retry count is a required input to this task, but was not supplied, or was not valid.  You may place a value of 0 (Zero) to force no retries.");
+        tl.error("A retry count is a required input to this task, but was not supplied, or was not valid.  You may place a value of 0 (Zero) to force no retries.");
         validInputs = false;
     }
 }
@@ -57,64 +58,41 @@ function validateInputs()
 
 
 ///URL Check
-function runCheckForUrl(url:string, retryCount:number)
+async function runCheckForUrl(url:string, retryCount:number): Promise<boolean>
 {
     let attemptCount:number = 0;
     let success: boolean = false;
+   
     do{
-        if(retryCount > 0)
+        if(attemptCount > 0)
         {
-            console.debug("retrying " + url);
+            tl.debug("retrying (" + attemptCount.toString() + ") " + url);
+            
         }
     
-        if(url.includes('http://'))
-        {
-            const http = require("http");
-            http.get(url, (res)=> {
-                const {statusCode } = res;
-                const contentType = res.headers['content-type'];
+        attemptCount += 1;
 
-                let error;
-                if(statusCode != input_expectedCode)
-                {
-                    success = false;
-                    
-                }
-                else{
-                    success = true;
-                }
-                res.resume();
-                
-            });
-        }
-        else if(url.includes('https://'))
+        var response = await fetch(url);
+        var s = await response.status;
+        console.log("Status: " + s.toString());
+        if(s.toString() == input_expectedCode)
         {
-            const https = require("https");
-            https.get(url, (res)=> {
-                const {statusCode } = res;
-                const contentType = res.headers['content-type'];
+            success = true;
+        }
+        else{
+            success = false;
+        }
 
-                let error;
-                if(statusCode != input_expectedCode)
-                {
-                    success = false;
-                }
-                res.resume();
-                
-            });
-        }
-        else 
-        {
-            attemptCount = retryCount +1;
-            console.warn("The value for the url does not seem valid -- expecting address to begin with the protocol (http:// or https://) but found: " + url );
-        }
+
         if(!success)
         {
             console.warn ("Failed to get expected result from " + url);
         }
-        retryCount += 1;
+        
     }
     while(attemptCount <= retryCount && !success)  
+
+    return success;
 }
 
 //split the url input in to an array of addresses
@@ -126,16 +104,76 @@ function ParseUrls(inputUrls:string)
 }
 
 
-console.log("Running web site validation tests... ");
-validateInputs();
-
-if(validInputs)
+///This function will loop through the array of passed in URLs and call
+/// to individually test them, and will return an overall success status
+async function runTestsForAllURLS(urlArray:string[]):Promise<boolean>
 {
-    let urlArray:string[] = ParseUrls(input_url);
+    var completeSuccess:boolean = true;
     for(let thisUrl of urlArray )
     {
         console.log(" Running check for " + thisUrl);
-        runCheckForUrl(thisUrl, input_retryCount);
+        var s:boolean = await runCheckForUrl(thisUrl, input_retryCount)
+        
+            if(!s)
+            {
+                console.log("Failed");
+                completeSuccess= false;
+            }
+            else{
+                console.log("Success!");
+            }
+    
+
     }
-  
+    return completeSuccess;
+}
+
+
+///Run function to handle the async running process of the task
+async function Run()
+{
+    console.log("Running web site validation tests... ");
+    validateInputs();
+
+    try{
+
+        if(validInputs)
+        {
+            //var completeSuccess:boolean = true;
+            let urlArray:string[] = ParseUrls(input_url);
+            
+            var completeSuccess = await runTestsForAllURLS(urlArray);
+
+            tl.debug("completeSuccess = " + completeSuccess.toString());
+            if(completeSuccess != true)
+            {
+                
+                tl.error("There were failures while smoke testing...");
+                
+                
+                tl.setResult(tl.TaskResult.Failed, "Smoke Test was not valid");
+                //Promise.reject(new Error("There were failures during Smoke testing"));
+               
+            }
+        
+        }
+        else{
+            tl.setResult(tl.TaskResult.Failed, "Invalid Inputs");
+        }
+    }
+    catch(err)
+    {
+        tl.setResult(tl.TaskResult.Failed, "Smoke Test was not valid");
+    }
+}
+
+//main
+try
+{
+    Run();
+}
+catch(err)
+{
+    
+    tl.setResult(tl.TaskResult.Failed, "Smoke Test was not valid");
 }

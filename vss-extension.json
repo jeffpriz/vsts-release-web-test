@@ -1,6 +1,6 @@
 {
     "manifestVersion": 1,
-    "id": "vsts=release-web-test-task",
+    "id": "release-web-smoke-test-task",
     "name": "Release Web Test",
     "version": "1.0.0",
     "publisher": "OneLuckiDev",
@@ -22,14 +22,6 @@
         },
         {
             "path": "images/icon-small.png",
-            "addressable": true
-        },
-        {
-            "path": "images/task.jpg",
-            "addressable": true
-        },
-        {
-            "path": "images/task-detail.jpg",
             "addressable": true
         }
     ],
