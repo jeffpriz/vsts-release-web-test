@@ -1,0 +1,50 @@
+{
+    "manifestVersion": 1,
+    "id": "release-web-smoke-test-task",
+    "name": "Release Web Smoke Test",
+    "version": "1.0.0",
+    "publisher": "OneLuckiDev",
+    "targets": [
+        {
+            "id": "Microsoft.VisualStudio.Services"
+        }
+    ],
+    "icons": {
+        "default": "images/icon-small.png"
+    },
+    "description": "Task for performing smoke web tests.",
+    "categories": [
+        "Build and release"
+    ],
+    "files": [
+        {
+            "path": "dist"
+        },
+        {
+            "path": "images/icon-small.png",
+            "addressable": true
+        }
+    ],
+    "contributions": [
+        {
+            "id": "vsts-release-web-test",
+            "type": "ms.vss-distributed-task.task",
+            "targets": [
+                "ms.vss-distributed-task.tasks"
+            ],
+            "properties": {
+                "name": "Release Web Test"
+            }
+        }
+    ],
+    "content": {
+        "details": {
+            "path": "README.md"
+        }
+    },
+    "repository": {
+        "type": "git",
+        "uri": "https://github.com/jeffpriz/vsts-release-web-test"
+    },
+    "public": true
+}
