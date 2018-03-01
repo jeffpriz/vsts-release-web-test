@@ -1,7 +1,7 @@
 {
     "id": "eea06bb8-4912-47d5-b3bf-2b742388daf3",
     "name": "oneluckidevWebSmokeTest",
-    "friendlyName": "Release Web Test",
+    "friendlyName": "Release Web Smoke Test",
     "description": "Release Task to test the availability of a web application after the deployment step so you can determine if the release was successful or not",
     "author": "Jeff Przylucki",  
     "category": "Utility",
@@ -12,7 +12,7 @@
     "version": {
       "Major": "1",
       "Minor": "0", 
-      "Patch": "22"
+      "Patch": "1"
     },
     "minimumAgentVersion": "1.95.0",
     "instanceNameFormat": "Smoke Web Test $(message)",

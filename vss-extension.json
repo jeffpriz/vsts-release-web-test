@@ -1,7 +1,7 @@
 {
     "manifestVersion": 1,
     "id": "release-web-smoke-test-task",
-    "name": "Release Web Test",
+    "name": "Release Web Smoke Test",
     "version": "1.0.0",
     "publisher": "OneLuckiDev",
     "targets": [
