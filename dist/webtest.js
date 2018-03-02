@@ -41,40 +41,55 @@ function validateInputs() {
 ///URL Check
 function runCheckForUrl(url, retryCount) {
     return tslib_1.__awaiter(this, void 0, void 0, function () {
-        var attemptCount, success, response, s;
+        var _this = this;
+        var attemptCount, success;
         return tslib_1.__generator(this, function (_a) {
-            switch (_a.label) {
-                case 0:
-                    attemptCount = 0;
-                    success = false;
-                    _a.label = 1;
-                case 1:
-                    if (attemptCount > 0) {
-                        tl.debug("retrying (" + attemptCount.toString() + ") " + url);
-                    }
-                    attemptCount += 1;
-                    return [4 /*yield*/, node_fetch_1.default(url)];
-                case 2:
-                    response = _a.sent();
-                    return [4 /*yield*/, response.status];
-                case 3:
-                    s = _a.sent();
-                    console.log("Status: " + s.toString());
-                    if (s.toString() == input_expectedCode) {
-                        success = true;
-                    }
-                    else {
-                        success = false;
-                    }
-                    if (!success) {
-                        console.warn("Failed to get expected result from " + url);
-                    }
-                    _a.label = 4;
-                case 4:
-                    if (attemptCount <= retryCount && !success) return [3 /*break*/, 1];
-                    _a.label = 5;
-                case 5: return [2 /*return*/, success];
-            }
+            attemptCount = 0;
+            success = false;
+            return [2 /*return*/, new Promise(function (resolve, reject) { return tslib_1.__awaiter(_this, void 0, void 0, function () {
+                    var response, s, err_1;
+                    return tslib_1.__generator(this, function (_a) {
+                        switch (_a.label) {
+                            case 0:
+                                _a.trys.push([0, 6, , 7]);
+                                _a.label = 1;
+                            case 1:
+                                if (attemptCount > 0) {
+                                    tl.debug("retrying (" + attemptCount.toString() + ") " + url);
+                                }
+                                attemptCount += 1;
+                                return [4 /*yield*/, node_fetch_1.default(url)];
+                            case 2:
+                                response = _a.sent();
+                                return [4 /*yield*/, response.status];
+                            case 3:
+                                s = _a.sent();
+                                console.log("Status: " + s.toString());
+                                if (s.toString() == input_expectedCode) {
+                                    success = true;
+                                }
+                                else {
+                                    success = false;
+                                }
+                                if (!success) {
+                                    console.warn("Failed to get expected result from " + url);
+                                }
+                                _a.label = 4;
+                            case 4:
+                                if (attemptCount <= retryCount && !success) return [3 /*break*/, 1];
+                                _a.label = 5;
+                            case 5:
+                                resolve(success);
+                                return [3 /*break*/, 7];
+                            case 6:
+                                err_1 = _a.sent();
+                                tl.debug("error in runCheckForUrl: " + url);
+                                reject(err_1);
+                                return [3 /*break*/, 7];
+                            case 7: return [2 /*return*/];
+                        }
+                    });
+                }); })];
         });
     });
 }
@@ -83,55 +98,73 @@ function ParseUrls(inputUrls) {
     var urlList = inputUrls.split(',');
     return urlList;
 }
+///This function will loop through the array of passed in URLs and call
+/// to individually test them, and will return an overall success status
 function runTestsForAllURLS(urlArray) {
     return tslib_1.__awaiter(this, void 0, void 0, function () {
-        var completeSuccess, urlArray_1, urlArray_1_1, thisUrl, s, e_1_1, e_1, _a;
-        return tslib_1.__generator(this, function (_b) {
-            switch (_b.label) {
-                case 0:
-                    completeSuccess = true;
-                    _b.label = 1;
-                case 1:
-                    _b.trys.push([1, 6, 7, 8]);
-                    urlArray_1 = tslib_1.__values(urlArray), urlArray_1_1 = urlArray_1.next();
-                    _b.label = 2;
-                case 2:
-                    if (!!urlArray_1_1.done) return [3 /*break*/, 5];
-                    thisUrl = urlArray_1_1.value;
-                    console.log(" Running check for " + thisUrl);
-                    return [4 /*yield*/, runCheckForUrl(thisUrl, input_retryCount)];
-                case 3:
-                    s = _b.sent();
-                    if (!s) {
-                        console.log("Failed");
-                        completeSuccess = false;
-                    }
-                    else {
-                        console.log("Success!");
-                    }
-                    _b.label = 4;
-                case 4:
-                    urlArray_1_1 = urlArray_1.next();
-                    return [3 /*break*/, 2];
-                case 5: return [3 /*break*/, 8];
-                case 6:
-                    e_1_1 = _b.sent();
-                    e_1 = { error: e_1_1 };
-                    return [3 /*break*/, 8];
-                case 7:
-                    try {
-                        if (urlArray_1_1 && !urlArray_1_1.done && (_a = urlArray_1.return)) _a.call(urlArray_1);
-                    }
-                    finally { if (e_1) throw e_1.error; }
-                    return [7 /*endfinally*/];
-                case 8: return [2 /*return*/, completeSuccess];
-            }
+        var _this = this;
+        var completeSuccess;
+        return tslib_1.__generator(this, function (_a) {
+            completeSuccess = true;
+            return [2 /*return*/, new Promise(function (resolve, reject) { return tslib_1.__awaiter(_this, void 0, void 0, function () {
+                    var urlArray_1, urlArray_1_1, thisUrl, s, e_1_1, err_2, e_1, _a;
+                    return tslib_1.__generator(this, function (_b) {
+                        switch (_b.label) {
+                            case 0:
+                                _b.trys.push([0, 9, , 10]);
+                                _b.label = 1;
+                            case 1:
+                                _b.trys.push([1, 6, 7, 8]);
+                                urlArray_1 = tslib_1.__values(urlArray), urlArray_1_1 = urlArray_1.next();
+                                _b.label = 2;
+                            case 2:
+                                if (!!urlArray_1_1.done) return [3 /*break*/, 5];
+                                thisUrl = urlArray_1_1.value;
+                                console.log(" Running check for " + thisUrl);
+                                return [4 /*yield*/, runCheckForUrl(thisUrl, input_retryCount)];
+                            case 3:
+                                s = _b.sent();
+                                if (!s) {
+                                    console.log("Failed");
+                                    completeSuccess = false;
+                                }
+                                else {
+                                    console.log("Success!");
+                                }
+                                _b.label = 4;
+                            case 4:
+                                urlArray_1_1 = urlArray_1.next();
+                                return [3 /*break*/, 2];
+                            case 5: return [3 /*break*/, 8];
+                            case 6:
+                                e_1_1 = _b.sent();
+                                e_1 = { error: e_1_1 };
+                                return [3 /*break*/, 8];
+                            case 7:
+                                try {
+                                    if (urlArray_1_1 && !urlArray_1_1.done && (_a = urlArray_1.return)) _a.call(urlArray_1);
+                                }
+                                finally { if (e_1) throw e_1.error; }
+                                return [7 /*endfinally*/];
+                            case 8:
+                                resolve(completeSuccess);
+                                return [3 /*break*/, 10];
+                            case 9:
+                                err_2 = _b.sent();
+                                tl.debug("Error in runTestsForAllURLS " + err_2.toString());
+                                reject(err_2);
+                                return [3 /*break*/, 10];
+                            case 10: return [2 /*return*/];
+                        }
+                    });
+                }); })];
         });
     });
 }
+///Run function to handle the async running process of the task
 function Run() {
     return tslib_1.__awaiter(this, void 0, void 0, function () {
-        var urlArray, completeSuccess, err_1;
+        var urlArray, completeSuccess, err_3;
         return tslib_1.__generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
@@ -149,7 +182,6 @@ function Run() {
                     if (completeSuccess != true) {
                         tl.error("There were failures while smoke testing...");
                         tl.setResult(tl.TaskResult.Failed, "Smoke Test was not valid");
-                        //Promise.reject(new Error("There were failures during Smoke testing"));
                     }
                     return [3 /*break*/, 4];
                 case 3:
@@ -157,7 +189,7 @@ function Run() {
                     _a.label = 4;
                 case 4: return [3 /*break*/, 6];
                 case 5:
-                    err_1 = _a.sent();
+                    err_3 = _a.sent();
                     tl.setResult(tl.TaskResult.Failed, "Smoke Test was not valid");
                     return [3 /*break*/, 6];
                 case 6: return [2 /*return*/];
@@ -165,6 +197,7 @@ function Run() {
         });
     });
 }
+//main
 try {
     Run();
 }

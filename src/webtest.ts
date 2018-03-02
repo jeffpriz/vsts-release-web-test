@@ -60,39 +60,51 @@ function validateInputs()
 ///URL Check
 async function runCheckForUrl(url:string, retryCount:number): Promise<boolean>
 {
+
     let attemptCount:number = 0;
     let success: boolean = false;
    
-    do{
-        if(attemptCount > 0)
-        {
-            tl.debug("retrying (" + attemptCount.toString() + ") " + url);
+    return new Promise<boolean>(async (resolve, reject) => {
+    try{
+        do{
+       
+            if(attemptCount > 0)
+            {
+                tl.debug("retrying (" + attemptCount.toString() + ") " + url);
+                
+            }
+        
+            attemptCount += 1;
+
+            var response = await fetch(url);
+            var s = await response.status;
+            console.log("Status: " + s.toString());
+            if(s.toString() == input_expectedCode)
+            {
+                success = true;
+            }
+            else{
+                success = false;
+            }
+
+
+            if(!success)
+            {
+                console.warn ("Failed to get expected result from " + url);
+            }
             
         }
-    
-        attemptCount += 1;
+        while(attemptCount <= retryCount && !success)  
 
-        var response = await fetch(url);
-        var s = await response.status;
-        console.log("Status: " + s.toString());
-        if(s.toString() == input_expectedCode)
-        {
-            success = true;
-        }
-        else{
-            success = false;
-        }
-
-
-        if(!success)
-        {
-            console.warn ("Failed to get expected result from " + url);
-        }
-        
+        resolve(success)
     }
-    while(attemptCount <= retryCount && !success)  
+    catch(err)
+    {
+        tl.debug("error in runCheckForUrl: " + url);
+        reject(err);
 
-    return success;
+    }
+    });
 }
 
 //split the url input in to an array of addresses
@@ -109,23 +121,33 @@ function ParseUrls(inputUrls:string)
 async function runTestsForAllURLS(urlArray:string[]):Promise<boolean>
 {
     var completeSuccess:boolean = true;
-    for(let thisUrl of urlArray )
-    {
-        console.log(" Running check for " + thisUrl);
-        var s:boolean = await runCheckForUrl(thisUrl, input_retryCount)
-        
-            if(!s)
-            {
-                console.log("Failed");
-                completeSuccess= false;
-            }
-            else{
-                console.log("Success!");
-            }
     
+    return new Promise<boolean>(async (resolve, reject) => {
+        try{
+            for(let thisUrl of urlArray )
+            {
+                console.log(" Running check for " + thisUrl);
+                var s:boolean = await runCheckForUrl(thisUrl, input_retryCount)
+                
+                    if(!s)
+                    {
+                        console.log("Failed");
+                        completeSuccess= false;
+                    }
+                    else{
+                        console.log("Success!");
+                    }
+            
 
-    }
-    return completeSuccess;
+            }
+            resolve(completeSuccess);
+        }
+        catch(err)
+        {
+            tl.debug("Error in runTestsForAllURLS " + err.toString());
+            reject(err);
+        }
+        });
 }
 
 
@@ -152,7 +174,6 @@ async function Run()
                 
                 
                 tl.setResult(tl.TaskResult.Failed, "Smoke Test was not valid");
-                //Promise.reject(new Error("There were failures during Smoke testing"));
                
             }
         
