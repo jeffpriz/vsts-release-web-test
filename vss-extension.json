@@ -2,7 +2,7 @@
     "manifestVersion": 1,
     "id": "release-web-smoke-test-task",
     "name": "Release Web Smoke Test",
-    "version": "1.0.0",
+    "version": "1.0.2",
     "publisher": "OneLuckiDev",
     "targets": [
         {
@@ -12,13 +12,13 @@
     "icons": {
         "default": "images/icon-small.png"
     },
-    "description": "Task for performing smoke web tests.",
+    "description": "Task for performing a smoke test on a released web application to validate that it is available at the end of a release.  This task will accept multiple web URLs, and a retry count.",
     "categories": [
         "Build and release"
     ],
     "files": [
         {
-            "path": "dist"
+            "path": "ReleaseWebTest"
         },
         {
             "path": "images/icon-small.png",
@@ -33,7 +33,7 @@
                 "ms.vss-distributed-task.tasks"
             ],
             "properties": {
-                "name": "Release Web Test"
+                "name": "ReleaseWebTest"
             }
         }
     ],
