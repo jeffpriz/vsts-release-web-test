@@ -12,6 +12,7 @@ var validInputs = true;
 //=----------------------------------------------------------
 function validateInputs() {
     //URL input
+    tl.debug("validating inputs...");
     validInputs = true;
     try {
         input_url = tl.getInput('url', true);
@@ -30,8 +31,17 @@ function validateInputs() {
     }
     //Retry Count input
     try {
+        var maxretry = 12;
         var rawRetryCount = tl.getInput('retryAttemptCount', true);
         input_retryCount = parseInt(rawRetryCount);
+        if (input_retryCount > maxretry) {
+            input_retryCount = maxretry;
+            console.log("the input value for retry count was greater than 12... setting a max of " + maxretry.toString() + " retries.");
+            tl.debug("resetting max retry to " + maxretry.toString());
+        }
+        else {
+            tl.debug("retry count " + input_retryCount.toString() + " is less than " + maxretry.toString());
+        }
     }
     catch (ex) {
         tl.error("A retry count is a required input to this task, but was not supplied, or was not valid.  You may place a value of 0 (Zero) to force no retries.");

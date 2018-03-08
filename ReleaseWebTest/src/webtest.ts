@@ -16,6 +16,7 @@ let validInputs:boolean = true;
 function validateInputs()
 {
     //URL input
+    tl.debug("validating inputs...");
     validInputs = true;
     try {
         input_url = tl.getInput('url',true);
@@ -44,12 +45,18 @@ function validateInputs()
     //Retry Count input
     try 
     {
+        let maxretry:number  = 12
         let rawRetryCount = tl.getInput('retryAttemptCount',true);
         input_retryCount = parseInt(rawRetryCount);
-        if(input_retryCount > 12)
+        if(input_retryCount > maxretry)
         {
-            input_retryCount = 12;
-            console.log("the input value for retry count was greater than 12... setting a max of 12 retries.");
+            input_retryCount = maxretry;
+            console.log("the input value for retry count was greater than 12... setting a max of " + maxretry.toString() + " retries.");
+            tl.debug("resetting max retry to " + maxretry.toString());
+        }
+        else
+        {
+            tl.debug("retry count " + input_retryCount.toString() + " is less than " + maxretry.toString());
         }
     }
     catch(ex)
