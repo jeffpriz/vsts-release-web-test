@@ -46,6 +46,11 @@ function validateInputs()
     {
         let rawRetryCount = tl.getInput('retryAttemptCount',true);
         input_retryCount = parseInt(rawRetryCount);
+        if(input_retryCount > 12)
+        {
+            input_retryCount = 12;
+            console.log("the input value for retry count was greater than 12... setting a max of 12 retries.");
+        }
     }
     catch(ex)
     {

@@ -2,7 +2,7 @@
     "manifestVersion": 1,
     "id": "release-web-smoke-test-task",
     "name": "Release Web Smoke Test",
-    "version": "1.0.2",
+    "version": "1.0.3",
     "publisher": "OneLuckiDev",
     "targets": [
         {
@@ -22,6 +22,14 @@
         },
         {
             "path": "images/icon-small.png",
+            "addressable": true
+        },
+        {
+            "path": "images/input.PNG",
+            "addressable": true
+        },
+        {
+            "path": "images/task.png",
             "addressable": true
         }
     ],
