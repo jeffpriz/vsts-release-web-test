@@ -1,5 +1,7 @@
-# vsts-release-web-test
+# VSTS Web Release Smoke Test
 TFS and VSTS release task to validate that a web app is available and running after in the release.  Written in node, not powershell, so may run on non-windows based build agents.
+
+**For a simple Release Quality Gate / Server Phase Smoke test task, see this: https://marketplace.visualstudio.com/items?itemName=OneLuckiDev.release-gate-smoke-test**
 
 ## Functionality
 This task will do a http or https Get call on a url, or a list of urls and check that it receives an expected return code.
