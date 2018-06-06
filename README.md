@@ -29,7 +29,7 @@ You may also Specify a number of retries, so that if a given call fails when fir
     
     Ex2. 0  --- Zero retries to fail after the first call
 
-**Delay Between Retries **
+**Delay Between Retries**
  -- The duration to wait between retry attempts.  This value is in milliseconds and defaults to 1000 (i.e. 1 second).
 
 ## Smoke Test task goals
