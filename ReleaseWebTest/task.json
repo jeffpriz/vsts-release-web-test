@@ -12,7 +12,7 @@
     "version": {
       "Major": "1",
       "Minor": "0", 
-      "Patch": "9"
+      "Patch": "10"
     },
     "minimumAgentVersion": "1.95.0",
     "instanceNameFormat": "Web Smoke Test $(message)",

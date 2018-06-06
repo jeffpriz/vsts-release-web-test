@@ -29,6 +29,9 @@ You may also Specify a number of retries, so that if a given call fails when fir
     
     Ex2. 0  --- Zero retries to fail after the first call
 
+**Delay Between Retries **
+ -- The duration to wait between retry attempts.  This value is in milliseconds and defaults to 1000 (i.e. 1 second).
+
 ## Smoke Test task goals
 
 Simple task to test the availability of a web applicaiton or api after a deployment to verify that there is some expected response.  This allows for a sanity check at the end of the release in to an environment to verify that what was deployed is actually functional.  
