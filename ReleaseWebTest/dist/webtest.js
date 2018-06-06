@@ -3,10 +3,21 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var tslib_1 = require("tslib");
 var tl = require("vsts-task-lib");
 var node_fetch_1 = require("node-fetch");
+var timers_1 = require("timers");
 var input_url = '';
 var input_expectedCode = '';
 var input_retryCount = 0;
 var validInputs = true;
+var input_retryDelay = 1000;
+function delay(milliseconds) {
+    return tslib_1.__awaiter(this, void 0, void 0, function () {
+        return tslib_1.__generator(this, function (_a) {
+            return [2 /*return*/, new Promise(function (resolve) {
+                    timers_1.setTimeout(function () { tl.debug("delay"); resolve(); }, milliseconds);
+                })];
+        });
+    });
+}
 //=----------------------------------------------------------
 //=  Validate that the inputs were provided as expected
 //=----------------------------------------------------------
@@ -27,6 +38,14 @@ function validateInputs() {
     }
     catch (ex) {
         tl.error("An expected return code is a required input to this task, but was not supplied");
+        validInputs = false;
+    }
+    try {
+        var temp_inputDelay = tl.getInput('retryDelay', true);
+        input_retryDelay = parseInt(temp_inputDelay);
+    }
+    catch (ex) {
+        tl.error("A retry delay value is require, and must be an integer value, but the task failed to get a valid value.  Please check your setting for this input.");
         validInputs = false;
     }
     //Retry Count input
@@ -61,18 +80,22 @@ function runCheckForUrl(url, retryCount) {
                     return tslib_1.__generator(this, function (_a) {
                         switch (_a.label) {
                             case 0:
-                                _a.trys.push([0, 6, , 7]);
+                                _a.trys.push([0, 8, , 9]);
                                 _a.label = 1;
                             case 1:
-                                if (attemptCount > 0) {
-                                    tl.debug("retrying (" + attemptCount.toString() + ") " + url);
-                                }
+                                if (!(attemptCount > 0)) return [3 /*break*/, 3];
+                                tl.debug("retrying (" + attemptCount.toString() + ") " + url);
+                                return [4 /*yield*/, delay(input_retryDelay)];
+                            case 2:
+                                _a.sent();
+                                _a.label = 3;
+                            case 3:
                                 attemptCount += 1;
                                 return [4 /*yield*/, node_fetch_1.default(url)];
-                            case 2:
+                            case 4:
                                 response = _a.sent();
                                 return [4 /*yield*/, response.status];
-                            case 3:
+                            case 5:
                                 s = _a.sent();
                                 console.log("Status: " + s.toString());
                                 if (s.toString() == input_expectedCode) {
@@ -84,19 +107,19 @@ function runCheckForUrl(url, retryCount) {
                                 if (!success) {
                                     console.warn("Failed to get expected result from " + url);
                                 }
-                                _a.label = 4;
-                            case 4:
-                                if (attemptCount <= retryCount && !success) return [3 /*break*/, 1];
-                                _a.label = 5;
-                            case 5:
-                                resolve(success);
-                                return [3 /*break*/, 7];
+                                _a.label = 6;
                             case 6:
+                                if (attemptCount <= retryCount && !success) return [3 /*break*/, 1];
+                                _a.label = 7;
+                            case 7:
+                                resolve(success);
+                                return [3 /*break*/, 9];
+                            case 8:
                                 err_1 = _a.sent();
                                 tl.debug("error in runCheckForUrl: " + url);
                                 reject(err_1);
-                                return [3 /*break*/, 7];
-                            case 7: return [2 /*return*/];
+                                return [3 /*break*/, 9];
+                            case 9: return [2 /*return*/];
                         }
                     });
                 }); })];

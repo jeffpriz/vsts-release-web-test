@@ -1,5 +1,7 @@
 import * as tl from 'vsts-task-lib';
 import fetch from 'node-fetch';
+import { setTimeout } from 'timers';
+import { SSL_OP_ALLOW_UNSAFE_LEGACY_RENEGOTIATION } from 'constants';
 
 
 let input_url:string = '';
@@ -7,7 +9,19 @@ let input_expectedCode:string = '';
 let input_retryCount:number = 0;
 
 let validInputs:boolean = true;
+let input_retryDelay:number = 1000;
 
+
+
+async function delay(milliseconds:number)
+{
+    
+    return new Promise<void>(resolve=> {
+            setTimeout(function(){tl.debug("delay");resolve();}, milliseconds);
+            
+        
+    });
+}
 
 
 //=----------------------------------------------------------
@@ -41,6 +55,16 @@ function validateInputs()
         validInputs = false;
     }
 
+    try
+    {
+        let temp_inputDelay:string  = tl.getInput('retryDelay', true)
+        input_retryDelay = parseInt(temp_inputDelay);
+    }
+    catch(ex)
+    {
+        tl.error("A retry delay value is require, and must be an integer value, but the task failed to get a valid value.  Please check your setting for this input.");
+        validInputs = false;
+    }
 
     //Retry Count input
     try 
@@ -83,7 +107,7 @@ async function runCheckForUrl(url:string, retryCount:number): Promise<boolean>
             if(attemptCount > 0)
             {
                 tl.debug("retrying (" + attemptCount.toString() + ") " + url);
-                
+                await delay(input_retryDelay);
             }
         
             attemptCount += 1;
@@ -103,6 +127,7 @@ async function runCheckForUrl(url:string, retryCount:number): Promise<boolean>
             if(!success)
             {
                 console.warn ("Failed to get expected result from " + url);
+               
             }
             
         }

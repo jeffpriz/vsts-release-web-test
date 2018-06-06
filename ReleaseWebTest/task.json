@@ -12,7 +12,7 @@
     "version": {
       "Major": "1",
       "Minor": "0", 
-      "Patch": "8"
+      "Patch": "9"
     },
     "minimumAgentVersion": "1.95.0",
     "instanceNameFormat": "Web Smoke Test $(message)",
@@ -50,6 +50,16 @@
             
             "required": true,
             "helpMarkDown": "Number of time to retry the call to the site before failing. A value of 0 will not retry.  Good values are ususally between 1 and 5.",
+            "groupName": "advanced"
+        },
+        {
+            "name": "retryDelay",
+            "type": "string",
+            "label": "Delay between retries (in milliseconds)",
+            "defaultValue": 1000,
+            
+            "required": true,
+            "helpMarkDown": "Time to delay after a failed call before attempting a retry",
             "groupName": "advanced"
         }
     ],

@@ -48,5 +48,6 @@ Since the task is executed by the build agent, your build machines has to have a
 
 ## Credits
 [Jeff Przylucki](http://www.oneluckidev.com)
-Icon - Smoke Detector by Arthur Shlain from the Noun Project
 
+
+Icon - Smoke Detector by Arthur Shlain from the Noun Project
