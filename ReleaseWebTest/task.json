@@ -12,7 +12,7 @@
     "version": {
       "Major": "1",
       "Minor": "0", 
-      "Patch": "11"
+      "Patch": "12"
     },
     "minimumAgentVersion": "1.95.0",
     "instanceNameFormat": "Web Smoke Test $(message)",
@@ -50,6 +50,15 @@
             
             "required": true,
             "helpMarkDown": "Number of time to retry the call to the site before failing. A value of 0 will not retry.  Good values are ususally between 1 and 5.",
+            "groupName": "advanced"
+        },
+        {
+            "name": "strictSSL",
+            "type": "boolean",
+            "label": "strictSSL ",
+            "defaultValue": "true",            
+            "required": true,
+            "helpMarkDown": "Set the value for sslStrict, turning this to false can help when you want/need to ignore some ssl certificate errors.",
             "groupName": "advanced"
         },
         {

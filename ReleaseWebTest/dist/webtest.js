@@ -2,12 +2,13 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var tslib_1 = require("tslib");
 var tl = require("vsts-task-lib");
-var node_fetch_1 = require("node-fetch");
+var httprequest = require("request-promise-native");
 var timers_1 = require("timers");
 var input_url = '';
 var input_expectedCode = '';
 var input_retryCount = 0;
-var validInputs = true;
+var input_strictSSL = true;
+var validInputs = false;
 var input_retryDelay = 1000;
 function delay(milliseconds) {
     return tslib_1.__awaiter(this, void 0, void 0, function () {
@@ -48,6 +49,14 @@ function validateInputs() {
         tl.error("A retry delay value is require, and must be an integer value, but the task failed to get a valid value.  Please check your setting for this input.");
         validInputs = false;
     }
+    try {
+        input_strictSSL = tl.getBoolInput('strictSSL', true);
+        tl.debug("input value of strictSSL is " + input_strictSSL.toString());
+    }
+    catch (ex) {
+        tl.error("A StrictSSL input value is required, but not found.");
+        validInputs = false;
+    }
     //Retry Count input
     try {
         var maxretry = 12;
@@ -76,11 +85,11 @@ function runCheckForUrl(url, retryCount) {
             attemptCount = 0;
             success = false;
             return [2 /*return*/, new Promise(function (resolve, reject) { return tslib_1.__awaiter(_this, void 0, void 0, function () {
-                    var response, s, err_1;
+                    var reqOption, s, result, errorR_1, err_1;
                     return tslib_1.__generator(this, function (_a) {
                         switch (_a.label) {
                             case 0:
-                                _a.trys.push([0, 8, , 9]);
+                                _a.trys.push([0, 10, , 11]);
                                 _a.label = 1;
                             case 1:
                                 if (!(attemptCount > 0)) return [3 /*break*/, 3];
@@ -91,13 +100,38 @@ function runCheckForUrl(url, retryCount) {
                                 _a.label = 3;
                             case 3:
                                 attemptCount += 1;
-                                return [4 /*yield*/, node_fetch_1.default(url)];
+                                if (input_strictSSL) {
+                                    tl.debug("Strict ssl is true");
+                                }
+                                else {
+                                    tl.debug("Strict ssl is false");
+                                }
+                                reqOption = {
+                                    method: 'GET',
+                                    uri: url,
+                                    simple: false,
+                                    resolveWithFullResponse: true,
+                                    strictSSL: input_strictSSL
+                                };
+                                tl.debug("Options passed to request: " + JSON.stringify(reqOption));
+                                s = 0;
+                                _a.label = 4;
                             case 4:
-                                response = _a.sent();
-                                return [4 /*yield*/, response.status];
+                                _a.trys.push([4, 6, , 7]);
+                                return [4 /*yield*/, httprequest(reqOption)];
                             case 5:
-                                s = _a.sent();
-                                console.log("Status: " + s.toString());
+                                result = _a.sent();
+                                tl.debug("Result status: " + result.statusCode);
+                                s = result.statusCode;
+                                return [3 /*break*/, 7];
+                            case 6:
+                                errorR_1 = _a.sent();
+                                tl.debug("error with request" + errorR_1);
+                                console.log("Error while calling url : " + errorR_1);
+                                s = errorR_1;
+                                return [3 /*break*/, 7];
+                            case 7:
+                                console.log("Status Code is:" + s);
                                 if (s.toString() == input_expectedCode) {
                                     success = true;
                                 }
@@ -107,19 +141,19 @@ function runCheckForUrl(url, retryCount) {
                                 if (!success) {
                                     console.warn("Failed to get expected result from " + url);
                                 }
-                                _a.label = 6;
-                            case 6:
-                                if (attemptCount <= retryCount && !success) return [3 /*break*/, 1];
-                                _a.label = 7;
-                            case 7:
-                                resolve(success);
-                                return [3 /*break*/, 9];
+                                _a.label = 8;
                             case 8:
+                                if (attemptCount <= retryCount && !success) return [3 /*break*/, 1];
+                                _a.label = 9;
+                            case 9:
+                                resolve(success);
+                                return [3 /*break*/, 11];
+                            case 10:
                                 err_1 = _a.sent();
                                 tl.debug("error in runCheckForUrl: " + url);
                                 reject(err_1);
-                                return [3 /*break*/, 9];
-                            case 9: return [2 /*return*/];
+                                return [3 /*break*/, 11];
+                            case 11: return [2 /*return*/];
                         }
                     });
                 }); })];
@@ -184,6 +218,7 @@ function runTestsForAllURLS(urlArray) {
                                 return [3 /*break*/, 10];
                             case 9:
                                 err_2 = _b.sent();
+                                tl.error(err_2.toString());
                                 tl.debug("Error in runTestsForAllURLS " + err_2.toString());
                                 reject(err_2);
                                 return [3 /*break*/, 10];

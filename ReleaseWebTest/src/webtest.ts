@@ -1,5 +1,5 @@
 import * as tl from 'vsts-task-lib';
-import fetch from 'node-fetch';
+import * as httprequest from 'request-promise-native';
 import { setTimeout } from 'timers';
 import { SSL_OP_ALLOW_UNSAFE_LEGACY_RENEGOTIATION } from 'constants';
 
@@ -7,8 +7,8 @@ import { SSL_OP_ALLOW_UNSAFE_LEGACY_RENEGOTIATION } from 'constants';
 let input_url:string = '';
 let input_expectedCode:string = '';
 let input_retryCount:number = 0;
-
-let validInputs:boolean = true;
+let input_strictSSL:Boolean = true;
+let validInputs:Boolean = false;
 let input_retryDelay:number = 1000;
 
 
@@ -29,6 +29,7 @@ async function delay(milliseconds:number)
 //=----------------------------------------------------------
 function validateInputs()
 {
+
     //URL input
     tl.debug("validating inputs...");
     validInputs = true;
@@ -63,6 +64,17 @@ function validateInputs()
     catch(ex)
     {
         tl.error("A retry delay value is require, and must be an integer value, but the task failed to get a valid value.  Please check your setting for this input.");
+        validInputs = false;
+    }
+
+    try
+    {
+        input_strictSSL  = tl.getBoolInput('strictSSL', true);
+        tl.debug("input value of strictSSL is " + input_strictSSL.toString());
+    }
+    catch(ex)
+    {
+        tl.error("A StrictSSL input value is required, but not found.");
         validInputs = false;
     }
 
@@ -111,10 +123,35 @@ async function runCheckForUrl(url:string, retryCount:number): Promise<boolean>
             }
         
             attemptCount += 1;
+            var reqOption = {
+                method:'GET',
+                uri:url,
+                simple:false,
+                resolveWithFullResponse: true,
+                strictSSL: input_strictSSL
+            };
 
-            var response = await fetch(url);
-            var s = await response.status;
-            console.log("Status: " + s.toString());
+            tl.debug("Options passed to request: " + JSON.stringify(reqOption));
+            var s = 0;
+            try{
+                var result = await httprequest(reqOption);
+                
+                tl.debug("Result status: " + result.statusCode);
+
+                s = result.statusCode;
+                
+            }
+            catch(errorR)
+            {
+                tl.debug("error with request" + errorR);
+                console.log("Error while calling url : " + errorR);
+                s = errorR
+
+            }
+
+            console.log("Status Code is:" + s);
+
+
             if(s.toString() == input_expectedCode)
             {
                 success = true;
@@ -137,6 +174,7 @@ async function runCheckForUrl(url:string, retryCount:number): Promise<boolean>
     }
     catch(err)
     {
+        
         tl.debug("error in runCheckForUrl: " + url);
         reject(err);
 
@@ -181,6 +219,7 @@ async function runTestsForAllURLS(urlArray:string[]):Promise<boolean>
         }
         catch(err)
         {
+            tl.error(err.toString());
             tl.debug("Error in runTestsForAllURLS " + err.toString());
             reject(err);
         }
