@@ -4,7 +4,7 @@
     "friendlyName": "Release Web Smoke Test",
     "description": "Release Task to test the availability of a web application after the deployment step so you can determine if the release was successful or not",
     "author": "Jeff Przylucki",  
-    "category": "Utility",
+    "category": "Test",
     "visibility": [
       "Release"
     ],
@@ -12,7 +12,7 @@
     "version": {
       "Major": "1",
       "Minor": "0", 
-      "Patch": "12"
+      "Patch": "15"
     },
     "minimumAgentVersion": "1.95.0",
     "instanceNameFormat": "Web Smoke Test $(message)",

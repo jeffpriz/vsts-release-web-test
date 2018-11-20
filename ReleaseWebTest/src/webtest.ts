@@ -1,4 +1,4 @@
-import * as tl from 'vsts-task-lib';
+import * as tl from 'azure-pipelines-task-lib';
 import * as httprequest from 'request-promise-native';
 import { setTimeout } from 'timers';
 import { SSL_OP_ALLOW_UNSAFE_LEGACY_RENEGOTIATION } from 'constants';
