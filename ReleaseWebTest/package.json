@@ -4,7 +4,7 @@
   "description": "This TFS & VSTS Release task can be used to validate that the website you deployed is available and running ",
   "main": "index.js",
   "scripts": {
-    "build": "tsc",
+    "build": "tsc.cmd",
     "compile": "npm install && npm build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
