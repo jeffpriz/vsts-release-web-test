@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var tslib_1 = require("tslib");
-var tl = require("vsts-task-lib");
+var tl = require("azure-pipelines-task-lib");
 var httprequest = require("request-promise-native");
 var timers_1 = require("timers");
 var input_url = '';
@@ -79,8 +79,8 @@ function validateInputs() {
 ///URL Check
 function runCheckForUrl(url, retryCount) {
     return tslib_1.__awaiter(this, void 0, void 0, function () {
-        var _this = this;
         var attemptCount, success;
+        var _this = this;
         return tslib_1.__generator(this, function (_a) {
             attemptCount = 0;
             success = false;
@@ -100,12 +100,6 @@ function runCheckForUrl(url, retryCount) {
                                 _a.label = 3;
                             case 3:
                                 attemptCount += 1;
-                                if (input_strictSSL) {
-                                    tl.debug("Strict ssl is true");
-                                }
-                                else {
-                                    tl.debug("Strict ssl is false");
-                                }
                                 reqOption = {
                                     method: 'GET',
                                     uri: url,
@@ -169,12 +163,12 @@ function ParseUrls(inputUrls) {
 /// to individually test them, and will return an overall success status
 function runTestsForAllURLS(urlArray) {
     return tslib_1.__awaiter(this, void 0, void 0, function () {
-        var _this = this;
         var completeSuccess;
+        var _this = this;
         return tslib_1.__generator(this, function (_a) {
             completeSuccess = true;
             return [2 /*return*/, new Promise(function (resolve, reject) { return tslib_1.__awaiter(_this, void 0, void 0, function () {
-                    var urlArray_1, urlArray_1_1, thisUrl, s, e_1_1, err_2, e_1, _a;
+                    var e_1, _a, urlArray_1, urlArray_1_1, thisUrl, s, e_1_1, err_2;
                     return tslib_1.__generator(this, function (_b) {
                         switch (_b.label) {
                             case 0:
