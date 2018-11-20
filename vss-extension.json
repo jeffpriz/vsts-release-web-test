@@ -33,6 +33,18 @@
             "addressable": true
         }
     ],
+    "badges": [
+        {
+            
+            "href": "https://oneluckidev.visualstudio.com/OneLuckiDev/_apis/build/status/vsts-release-web-test",
+            "uri": "https://oneluckidev.visualstudio.com/OneLuckiDev/_apis/build/status/vsts-release-web-test",
+            "description": "Build for this Task run in Azure DevOps"
+        }
+    ],
+    "branding": {
+        "color": "rgb(27,160,225)",
+        "theme": "dark"
+    },
     "contributions": [
         {
             "id": "vsts-release-web-test",
