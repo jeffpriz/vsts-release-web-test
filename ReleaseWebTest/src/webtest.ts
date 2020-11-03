@@ -34,7 +34,14 @@ function validateInputs()
     tl.debug("validating inputs...");
     validInputs = true;
     try {
-        input_url = tl.getInput('url',true);
+        let test:string|undefined = tl.getInput('url',true);
+        if(test!= undefined)
+        {
+            input_url = test;
+        }
+        else{
+            throw("The input URL was undefined");
+        }
         
 
     }
@@ -48,18 +55,35 @@ function validateInputs()
     //Return Code Value Input
     try 
     {
-        input_expectedCode = tl.getInput('expectedReturnCode',true);
+        let test:string|undefined = tl.getInput('expectedReturnCode',true);
+        if(test != undefined)
+        {
+            input_expectedCode = test;
+        }
+        else
+        {
+            throw("The expected return code was undefined");
+        }
     }
     catch(ex)
     {
+        
         tl.error("An expected return code is a required input to this task, but was not supplied");
         validInputs = false;
     }
 
     try
     {
-        let temp_inputDelay:string  = tl.getInput('retryDelay', true)
-        input_retryDelay = parseInt(temp_inputDelay);
+        let test:string|undefined =tl.getInput('retryDelay', true);
+        if(test != undefined)
+        {
+            let temp_inputDelay:string  = test;
+            input_retryDelay = parseInt(temp_inputDelay);
+        }
+        else
+        {
+            throw("the inputdelay was undefined");
+        }
     }
     catch(ex)
     {
@@ -83,16 +107,23 @@ function validateInputs()
     {
         let maxretry:number  = 12
         let rawRetryCount = tl.getInput('retryAttemptCount',true);
-        input_retryCount = parseInt(rawRetryCount);
-        if(input_retryCount > maxretry)
+        if(rawRetryCount != undefined)
         {
-            input_retryCount = maxretry;
-            console.log("the input value for retry count was greater than 12... setting a max of " + maxretry.toString() + " retries.");
-            tl.debug("resetting max retry to " + maxretry.toString());
+            input_retryCount = parseInt(rawRetryCount);
+            if(input_retryCount > maxretry)
+            {
+                input_retryCount = maxretry;
+                console.log("the input value for retry count was greater than 12... setting a max of " + maxretry.toString() + " retries.");
+                tl.debug("resetting max retry to " + maxretry.toString());
+            }
+            else
+            {
+                tl.debug("retry count " + input_retryCount.toString() + " is less than " + maxretry.toString());
+            }
         }
         else
         {
-            tl.debug("retry count " + input_retryCount.toString() + " is less than " + maxretry.toString());
+            throw("the retry count was undefined");
         }
     }
     catch(ex)
@@ -183,7 +214,7 @@ async function runCheckForUrl(url:string, retryCount:number): Promise<boolean>
 }
 
 //split the url input in to an array of addresses
-function ParseUrls(inputUrls:string)
+export function ParseUrls(inputUrls:string)
 {
     let urlList:string[] = inputUrls.split(',');
 

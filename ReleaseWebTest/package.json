@@ -6,11 +6,11 @@
   "scripts": {
     "build": "tsc.cmd",
     "compile": "npm install && npm build",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha"
   },
   "keywords": [
-    "TFS",
-    "VSTS",
+    "Azure Pipelines",
+    "Azure DevOps",
     "Release"
   ],
   "author": "Jeff Przylucki",
@@ -18,22 +18,24 @@
   "repository": {
     "url": "https://github.com/jeffpriz/vsts-release-web-test"
   },
-  "devDependencies": {    
+  "devDependencies": {
     "typescript": "^2.4.2",
-    "@types/node": "^6.0.31"
-    
+    "@types/node": "^6.0.31",
+    "mocha": "6.2.0",
+    "@types/mocha": "5.2.7",
+    "chai": "4.2.0"
   },
   "files": [
     "dist/",
     "src/",
-    "config/"
+    "config/",
+    "test/"
   ],
   "dependencies": {
-    "azure-pipelines-task-lib":"^2.7.7",
+    "azure-pipelines-task-lib": "^2.11.3",
     "reflect-metadata": "^0.1.10",
-    "tslib":"^1.9.3",
-    "request":"^2.88.0",
-    "request-promise-native":"^1.0.7"
-
+    "tslib": "^1.9.3",
+    "request": "^2.88.2",
+    "request-promise-native": "^1.0.9"
   }
 }
