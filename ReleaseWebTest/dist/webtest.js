@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.ParseUrls = void 0;
 var tslib_1 = require("tslib");
 var tl = require("azure-pipelines-task-lib");
 var httprequest = require("request-promise-native");
@@ -192,7 +193,8 @@ function runTestsForAllURLS(urlArray) {
         return tslib_1.__generator(this, function (_a) {
             completeSuccess = true;
             return [2 /*return*/, new Promise(function (resolve, reject) { return tslib_1.__awaiter(_this, void 0, void 0, function () {
-                    var e_1, _a, urlArray_1, urlArray_1_1, thisUrl, s, e_1_1, err_2;
+                    var urlArray_1, urlArray_1_1, thisUrl, s, e_1_1, err_2;
+                    var e_1, _a;
                     return tslib_1.__generator(this, function (_b) {
                         switch (_b.label) {
                             case 0:
