@@ -15,7 +15,7 @@ function delay(milliseconds) {
     return tslib_1.__awaiter(this, void 0, void 0, function () {
         return tslib_1.__generator(this, function (_a) {
             return [2 /*return*/, new Promise(function (resolve) {
-                    timers_1.setTimeout(function () { tl.debug("delay"); resolve(); }, milliseconds);
+                    (0, timers_1.setTimeout)(function () { tl.debug("delay"); resolve(); }, milliseconds);
                 })];
         });
     });
@@ -132,7 +132,7 @@ function runCheckForUrl(url, retryCount) {
                                     strictSSL: input_strictSSL
                                 };
                                 tl.debug("Options passed to request: " + JSON.stringify(reqOption));
-                                s = 0;
+                                s = "";
                                 _a.label = 4;
                             case 4:
                                 _a.trys.push([4, 6, , 7]);
@@ -146,7 +146,7 @@ function runCheckForUrl(url, retryCount) {
                                 errorR_1 = _a.sent();
                                 tl.debug("error with request" + errorR_1);
                                 console.log("Error while calling url : " + errorR_1);
-                                s = errorR_1;
+                                s = JSON.stringify(errorR_1);
                                 return [3 /*break*/, 7];
                             case 7:
                                 console.log("Status Code is:" + s);
@@ -238,8 +238,8 @@ function runTestsForAllURLS(urlArray) {
                                 return [3 /*break*/, 10];
                             case 9:
                                 err_2 = _b.sent();
-                                tl.error(err_2.toString());
-                                tl.debug("Error in runTestsForAllURLS " + err_2.toString());
+                                tl.error(JSON.stringify(err_2));
+                                tl.debug("Error in runTestsForAllURLS " + JSON.stringify(err_2));
                                 reject(err_2);
                                 return [3 /*break*/, 10];
                             case 10: return [2 /*return*/];

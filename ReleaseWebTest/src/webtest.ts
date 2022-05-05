@@ -163,7 +163,7 @@ async function runCheckForUrl(url:string, retryCount:number): Promise<boolean>
             };
 
             tl.debug("Options passed to request: " + JSON.stringify(reqOption));
-            var s = 0;
+            var s:string = "";
             try{
                 var result = await httprequest(reqOption);
                 
@@ -176,7 +176,7 @@ async function runCheckForUrl(url:string, retryCount:number): Promise<boolean>
             {
                 tl.debug("error with request" + errorR);
                 console.log("Error while calling url : " + errorR);
-                s = errorR
+                s = JSON.stringify(errorR)
 
             }
 
@@ -250,8 +250,8 @@ async function runTestsForAllURLS(urlArray:string[]):Promise<boolean>
         }
         catch(err)
         {
-            tl.error(err.toString());
-            tl.debug("Error in runTestsForAllURLS " + err.toString());
+            tl.error(JSON.stringify(err));
+            tl.debug("Error in runTestsForAllURLS " + JSON.stringify(err));
             reject(err);
         }
         });
