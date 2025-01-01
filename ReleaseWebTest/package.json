@@ -6,7 +6,8 @@
   "scripts": {
     "build": "tsc.cmd",
     "compile": "npm install && npm build",
-    "test": "mocha"
+    "test": "mocha",
+    "package-extension": "tfx extension create --manifest-globs vss-extension.json"
   },
   "keywords": [
     "Azure Pipelines",
@@ -19,11 +20,12 @@
     "url": "https://github.com/jeffpriz/vsts-release-web-test"
   },
   "devDependencies": {
-    "typescript": "^4.6.2",
-    "@types/node": "^10.17.0",
-    "mocha": "6.2.0",
-    "@types/mocha": "5.2.7",
-    "chai": "4.2.0"
+    "typescript": "5.1.6",
+    "@types/node": "^20.3.1",
+    "mocha": "11.0.1",
+    "@types/mocha": "10.0.10",
+    "chai": "5.1.2",
+    "@types/chai": "5.0.1"
   },
   "files": [
     "dist/",
@@ -32,9 +34,8 @@
     "test/"
   ],
   "dependencies": {
-    "azure-pipelines-task-lib": "3.2.0",
-    "reflect-metadata": "^0.1.10",
-    "tslib": "^1.9.3",
+    "azure-pipelines-task-lib": "4.17.3",        
+    "tslib": "2.8.1",
     "request": "^2.88.2",
     "request-promise-native": "^1.0.9"
   }
